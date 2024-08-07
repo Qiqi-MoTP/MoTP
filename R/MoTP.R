@@ -21,18 +21,23 @@ MoTP <- function(data_list, omic_list = c("mRNA-seq", "miRNA-seq", "lncRNA-seq",
   }
 
   config <- list(
-    "mRNA-seq" = list(model = 'mrnMoTP_model', neurons = 2, name = "mrnMoTP"),
-    "miRNA-seq" = list(model = 'micMoTP_model', neurons = 5, name = "mirMoTP"),
-    "lncRNA-seq" = list(model = 'lncMoTP_model', neurons = 2, name = "lncMoTP"),
-    "DNA-methylation" = list(model = "metMoTP_model", neurons = 6, name = "metMoTP")
+    "mRNA-seq" = list(file = 'mrnMoTP_model', neurons = 2, name = "mrnMoTP"),
+    "miRNA-seq" = list(file = 'micMoTP_model', neurons = 5, name = "mirMoTP"),
+    "lncRNA-seq" = list(file = 'lncMoTP_model', neurons = 2, name = "lncMoTP"),
+    "DNA-methylation" = list(file = 'metMoTP_model', neurons = 6, name = "metMoTP")
   )
   
   if (!all(omic_list %in% names(config))) {
     stop("Unsupported omic type.")
   }
   
-  process_data <- function(data, file, neurons) {
-    Fit <- model
+  process_data <- function(data, file_name, neurons) {
+
+    if (!exists(file_name, where = "package:MoTP")) {
+      stop("Invalidation"))
+    }
+    
+    Fit <- get(file_name, envir = asNamespace("MoTP"))
     training_data <- Fit$trainingData
     features <- intersect(colnames(training_data)[-1], colnames(data))
     
