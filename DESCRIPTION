@@ -1,7 +1,8 @@
 Package: MoTP
 Title: Inferring tumor purity using multi-omics data based on a uniform machine learning framework MoTP across cancer types
 Version: 1.1.0
-Authors@R: Qiqi Lu, Xiaosheng Wang
+Authors@R: person(given = "Qiqi", family = "Lu", role = c("aut", "cre")),
+           person(given = "Xiaosheng", family = "Wang", role = c("aut", "cre"))
 Maintainer: Qiqi Lu <qiqi.lu@stu.cpu.edu.cn>, Xiaosheng Wang <xiaosheng.wang@cpu.edu.cn>
 Description: Estimating tumor purity using either single-omic or multi-omics approaches with transcriptomic (mRNA, microRNA, and long non-coding RNA) and DNA methylation data.
 License: MIT + file LICENSE
@@ -12,3 +13,4 @@ Imports:
     caret,
     data.table,
     glmnet
+
