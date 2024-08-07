@@ -33,7 +33,7 @@ MoTP <- function(data_list, omic_list = c("mRNA-seq", "miRNA-seq", "lncRNA-seq",
   
   process_data <- function(data, file_name, neurons) {
     
-    Fit <- file
+    Fit <- readRDS(file_name)
     training_data <- Fit$trainingData
     features <- intersect(colnames(training_data)[-1], colnames(data))
     
