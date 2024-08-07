@@ -34,7 +34,7 @@ MoTP <- function(data_list, omic_list = c("mRNA-seq", "miRNA-seq", "lncRNA-seq",
   process_data <- function(data, file_name, neurons) {
 
     if (!exists(file_name, where = "package:MoTP")) {
-      stop("Invalidation"))
+      stop("Error")
     }
     
     Fit <- get(file_name, envir = asNamespace("MoTP"))
