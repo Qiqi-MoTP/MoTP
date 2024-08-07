@@ -43,18 +43,22 @@ MoTP <- function(data_list, omic_list = c("mRNA-seq", "miRNA-seq", "lncRNA-seq",
     if (length(features) < length(colnames(training_data)[-1])) {
       training_data2 <- training_data[, c(".outcome", features), drop = FALSE]
       set.seed(456)
-      tuneGrid <- expand.grid(neurons = neurons)
-      ctrl <- trainControl(method = "none")
       
-      New_Fit <- train(.outcome ~ ., data = training_data2, 
+      #' @importFrom caret train trainControl 
+      tuneGrid <- expand.grid(neurons = neurons)
+      ctrl <- caret::trainControl(method = "none")
+      
+      New_Fit <- caret::train(.outcome ~ ., data = training_data2, 
                        method = "brnn",
                        trControl = ctrl,
                        tuneGrid = tuneGrid,
                        verbose = FALSE,
                        preProc = "zv")
-      predictions <- predict(New_Fit, newdata = data[, features, drop = FALSE])
+
+      #' @importFrom stats predict 
+      predictions <- stats::predict(New_Fit, newdata = data[, features, drop = FALSE])
     } else {
-      predictions <- predict(Fit, newdata = data)
+      predictions <- stats::predict(Fit, newdata = data)
     }
     
     predictions <- pmax(pmin(predictions, 1), 0)

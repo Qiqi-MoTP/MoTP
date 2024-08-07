@@ -26,8 +26,11 @@ Preprocess <- function(original_list) {
   }
 
     row_names <- rownames(omics_data)
-    DT <- as.data.table(omics_data)
+    
+    #' @importFrom data.table as.data.table
+    DT <- data.table::as.data.table(omics_data)
 
+    ## .SD is used in data.table environments
     DT <- DT[, lapply(.SD, function(x) {
       if (any(!is.numeric(x))) stop("All data must be numeric.")
       x[is.na(x)] <- mean(x, na.rm = TRUE)
