@@ -21,10 +21,10 @@ MoTP <- function(data_list, omic_list = c("mRNA-seq", "miRNA-seq", "lncRNA-seq",
   }
 
   config <- list(
-    "mRNA-seq" = list(model = 'mrnRNA_model', neurons = 2, name = "mrnMoTP"),
-    "miRNA-seq" = list(model = 'micRNA_model', neurons = 5, name = "mirMoTP"),
-    "lncRNA-seq" = list(model = 'lncRNA_model', neurons = 2, name = "lncMoTP"),
-    "DNA-methylation" = list(model = metRNA_model, neurons = 6, name = "metMoTP")
+    "mRNA-seq" = list(model = 'mrnMoTP_model', neurons = 2, name = "mrnMoTP"),
+    "miRNA-seq" = list(model = 'micMoTP_model', neurons = 5, name = "mirMoTP"),
+    "lncRNA-seq" = list(model = 'lncMoTP_model', neurons = 2, name = "lncMoTP"),
+    "DNA-methylation" = list(model = "metMoTP_model", neurons = 6, name = "metMoTP")
   )
   
   if (!all(omic_list %in% names(config))) {
