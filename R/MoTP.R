@@ -21,10 +21,10 @@ MoTP <- function(data_list, omic_list = c("mRNA-seq", "miRNA-seq", "lncRNA-seq",
   }
 
   config <- list(
-    "mRNA-seq" = list(file = "mrnRNA_model.rds", neurons = 2, name = "mrnMoTP"),
-    "miRNA-seq" = list(file = "micRNA_model.rds", neurons = 5, name = "mirMoTP"),
-    "lncRNA-seq" = list(file = "lncRNA_model.rds", neurons = 2, name = "lncMoTP"),
-    "DNA-methylation" = list(file = "metRNA_model.rds", neurons = 6, name = "metMoTP")
+    "mRNA-seq" = list(model = 'mrnRNA_model', neurons = 2, name = "mrnMoTP"),
+    "miRNA-seq" = list(model = 'micRNA_model', neurons = 5, name = "mirMoTP"),
+    "lncRNA-seq" = list(model = 'lncRNA_model', neurons = 2, name = "lncMoTP"),
+    "DNA-methylation" = list(model = metRNA_model, neurons = 6, name = "metMoTP")
   )
   
   if (!all(omic_list %in% names(config))) {
@@ -32,7 +32,7 @@ MoTP <- function(data_list, omic_list = c("mRNA-seq", "miRNA-seq", "lncRNA-seq",
   }
   
   process_data <- function(data, file, neurons) {
-    Fit <- readRDS(file = file)
+    Fit <- model
     training_data <- Fit$trainingData
     features <- intersect(colnames(training_data)[-1], colnames(data))
     
