@@ -1,9 +1,9 @@
 #' Multi-Omics Tumor Purity Prediction
 #'
-#' This function predicts tumor purity from either single-omic or multi-omics data using pre-trained models. 
+#' This function predicts tumor purity from either single-omics or multi-omics data using pre-trained models. 
 #' #'
-#' @param data_list This function preprocesses a list of omics data frames or matrices. Specifically, each element in the list represents a different omics dataset, where each row corresponds to a gene and each column corresponds to a tumor sample.The list must contain at least one omics datase.
-#' @param omic_list A character vector indicating the type of each omics data in data_list. Default is c("mRNA-seq", "miRNA-seq", "lncRNA-seq", "DNA-methylation").
+#' @param data_list A list of omics data frames or matrices. Specifically, each element in the list represents a different omics dataset, where each row corresponds to a gene and each column corresponds to a tumor sample. The list must contain at least one omics dataset.
+#' @param omics_list A character vector indicating the type of each omics data in data_list. Default is c("mRNA-seq", "miRNA-seq", "lncRNA-seq", "DNA-methylation").
 #'
 #' @return A data frame containing sample IDs and predicted tumor purity values for each omics type as well as the averaged tumor purity across all provided omics types.
 #' @export
@@ -12,12 +12,12 @@
 #' # Example usage:
 #' # data_list <- list(mRNA_data, miRNA_data, lncRNA_data, methylation_data)
 #' # result <- MoTP(data_list,c("mRNA-seq", "miRNA-seq", "lncRNA-seq", "DNA-methylation"))
-MoTP <- function(data_list, omic_list = c("mRNA-seq", "miRNA-seq", "lncRNA-seq", "DNA-methylation")) {
+MoTP <- function(data_list, omics_list = c("mRNA-seq", "miRNA-seq", "lncRNA-seq", "DNA-methylation")) {
   if (missing(data_list) || !is.list(data_list) || length(data_list) == 0) {
     stop("The data_list is incorrect. It should be a list of data frames or matrices.")
   }
-  if (missing(omic_list) || !is.vector(omic_list) || length(omic_list) != length(data_list)) {
-    stop("The omic_list is incorrect. It should be a vector with the same length as data_list.")
+  if (missing(omics_list) || !is.vector(omics_list) || length(omics_list) != length(data_list)) {
+    stop("The omics_list is incorrect. It should be a vector with the same length as data_list.")
   }
   
   # Load all models
@@ -30,8 +30,8 @@ MoTP <- function(data_list, omic_list = c("mRNA-seq", "miRNA-seq", "lncRNA-seq",
     "DNA-methylation" = list(Fit = metMoTP_model, neurons = 6, name = "metMoTP")
   )
   
-  if (!all(omic_list %in% names(config))) {
-    stop("Unsupported omic type.")
+  if (!all(omics_list %in% names(config))) {
+    stop("Unsupported omics type.")
   }
   
   process_data <- function(data, Fit, neurons) {
@@ -71,7 +71,7 @@ MoTP <- function(data_list, omic_list = c("mRNA-seq", "miRNA-seq", "lncRNA-seq",
   
   results <- lapply(seq_along(data_list), function(i) {
     data <- data_list[[i]]
-    type <- omic_list[i]
+    type <- omics_list[i]
     config_item <- config[[type]]
     result <- process_data(data, config_item$Fit, config_item$neurons)
     colnames(result)[2] <- config_item$name
