@@ -63,6 +63,7 @@ MoTP <- function(data_list, omic_list = c("mRNA-seq", "miRNA-seq", "lncRNA-seq",
       predictions <- stats::predict(Fit, newdata = data)
     }
     
+    predictions <- as.numeric(predictions)
     predictions <- pmax(pmin(predictions, 1), 0)
     predictions2 <- data.frame(Sample = rownames(data), Prediction = predictions)
     return(predictions2)
