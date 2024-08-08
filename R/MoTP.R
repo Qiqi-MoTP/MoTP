@@ -3,7 +3,7 @@
 #' This function predicts tumor purity from either single-omics or multi-omics data using pre-trained models. 
 #' #'
 #' @param data_list A list of omics data frames or matrices. Specifically, each element in the list represents a different omics dataset, where each row corresponds to a gene and each column corresponds to a tumor sample. The list must contain at least one omics dataset.
-#' @param omics_list A character vector indicating the type of each omics data in data_list. Default is c("mRNA", "miRNA", "lncRNA", "DNA-methylation").
+#' @param omic_list A character vector indicating the type of each omics data in data_list. Default is c("mRNA", "miRNA", "lncRNA", "DNA-methylation").
 #'
 #' @return A data frame containing sample IDs and predicted tumor purity values for each omics type as well as the averaged tumor purity across all provided omics types.
 #' @export
