@@ -19,7 +19,7 @@ MoTP <- function(data_list, omic_list = c("mRNA-seq", "miRNA-seq", "lncRNA-seq",
   if (missing(omic_list) || !is.vector(omic_list) || length(omic_list) != length(data_list)) {
     stop("The omic_list is incorrect. It should be a vector with the same length as data_list.")
   }
-
+  
   config <- list(
     "mRNA-seq" = list(file = system.file("data", "mrnMoTP_model.rds", package = "MoTP"), neurons = 2, name = "mrnMoTP"),
     "miRNA-seq" = list(file = system.file("data", "mirMoTP_model.rds", package = "MoTP"), neurons = 5, name = "mirMoTP"),
@@ -32,8 +32,17 @@ MoTP <- function(data_list, omic_list = c("mRNA-seq", "miRNA-seq", "lncRNA-seq",
   }
   
   process_data <- function(data, file_name, neurons) {
+    if (!file.exists(file_name)) {
+      stop(paste("File does not exist:", file_name))
+    }
     
-    Fit <- readRDS(file_name)
+    Fit <- tryCatch(
+      readRDS(file_name),
+      error = function(e) {
+        stop(paste("Error reading RDS file:", file_name, "\\n", e))
+      }
+    )
+    
     training_data <- Fit$trainingData
     features <- intersect(colnames(training_data)[-1], colnames(data))
     
@@ -45,18 +54,16 @@ MoTP <- function(data_list, omic_list = c("mRNA-seq", "miRNA-seq", "lncRNA-seq",
       training_data2 <- training_data[, c(".outcome", features), drop = FALSE]
       set.seed(456)
       
-      #' @importFrom caret train trainControl 
       tuneGrid <- expand.grid(neurons = neurons)
       ctrl <- caret::trainControl(method = "none")
       
       New_Fit <- caret::train(.outcome ~ ., data = training_data2, 
-                       method = "brnn",
-                       trControl = ctrl,
-                       tuneGrid = tuneGrid,
-                       verbose = FALSE,
-                       preProc = "zv")
-
-      #' @importFrom stats predict 
+                              method = "brnn",
+                              trControl = ctrl,
+                              tuneGrid = tuneGrid,
+                              verbose = FALSE,
+                              preProc = "zv")
+      
       predictions <- stats::predict(New_Fit, newdata = data[, features, drop = FALSE])
     } else {
       predictions <- stats::predict(Fit, newdata = data)
@@ -71,6 +78,7 @@ MoTP <- function(data_list, omic_list = c("mRNA-seq", "miRNA-seq", "lncRNA-seq",
     data <- data_list[[i]]
     type <- omic_list[i]
     config_item <- config[[type]]
+    cat("Processing type:", type, "with file:", config_item$file, "\\n")
     result <- process_data(data, config_item$file, config_item$neurons)
     colnames(result)[2] <- config_item$name
     result
@@ -88,3 +96,4 @@ MoTP <- function(data_list, omic_list = c("mRNA-seq", "miRNA-seq", "lncRNA-seq",
   
   return(merged_result)
 }
+
