@@ -12,6 +12,6 @@ RoxygenNote: 7.3.1
 Imports: 
     caret,
     data.table
-
-
-
+Depends: 
+    R (>= 2.10)
+LazyData: true
