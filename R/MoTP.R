@@ -3,7 +3,7 @@
 #' This function predicts tumor purity from either single-omics or multi-omics data using pre-trained models. 
 #' #'
 #' @param data_list A list of omics data frames or matrices. Specifically, each element in the list represents a different omics dataset, where each row corresponds to a gene and each column corresponds to a tumor sample. The list must contain at least one omics dataset.
-#' @param omics_list A character vector indicating the type of each omics data in data_list. Default is c("mRNA-seq", "miRNA-seq", "lncRNA-seq", "DNA-methylation").
+#' @param omics_list A character vector indicating the type of each omics data in data_list. Default is c("mRNA", "miRNA", "lncRNA", "DNA-methylation").
 #'
 #' @return A data frame containing sample IDs and predicted tumor purity values for each omics type as well as the averaged tumor purity across all provided omics types.
 #' @export
@@ -11,8 +11,8 @@
 #' @examples
 #' # Example usage:
 #' # data_list <- list(mRNA_data, miRNA_data, lncRNA_data, methylation_data)
-#' # result <- MoTP(data_list,c("mRNA-seq", "miRNA-seq", "lncRNA-seq", "DNA-methylation"))
-MoTP <- function(data_list, omics_list = c("mRNA-seq", "miRNA-seq", "lncRNA-seq", "DNA-methylation")) {
+#' # result <- MoTP(data_list,c("mRNA", "miRNA", "lncRNA", "DNA-methylation"))
+MoTP <- function(data_list, omics_list = c("mRNA", "miRNA", "lncRNA", "DNA-methylation")) {
   if (missing(data_list) || !is.list(data_list) || length(data_list) == 0) {
     stop("The data_list is incorrect. It should be a list of data frames or matrices.")
   }
@@ -24,9 +24,9 @@ MoTP <- function(data_list, omics_list = c("mRNA-seq", "miRNA-seq", "lncRNA-seq"
   load(system.file("data", "all_models.RData", package = "MoTP"))
   
   config <- list(
-    "mRNA-seq" = list(Fit = mrnMoTP_model, neurons = 2, name = "mrnMoTP"),
-    "miRNA-seq" = list(Fit = mirMoTP_model, neurons = 5, name = "mirMoTP"),
-    "lncRNA-seq" = list(Fit = lncMoTP_model, neurons = 2, name = "lncMoTP"),
+    "mRNA" = list(Fit = mrnMoTP_model, neurons = 2, name = "mrnMoTP"),
+    "miRNA" = list(Fit = mirMoTP_model, neurons = 5, name = "mirMoTP"),
+    "lncRNA" = list(Fit = lncMoTP_model, neurons = 2, name = "lncMoTP"),
     "DNA-methylation" = list(Fit = metMoTP_model, neurons = 6, name = "metMoTP")
   )
   

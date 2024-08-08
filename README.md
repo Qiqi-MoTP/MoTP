@@ -21,8 +21,8 @@ A novel algorithm that integrates mRNA expression, DNA methylation, miRNA expres
 
 + The function `Preprocess()` is  preprocessing a list of omics data frames or matrices. Including impute missing values and [0,1] scaled (maximum=1, minimum=0). This step is not necessary, you can choose to process the data yourself, as long as the data has no missing values and the range is scaled to [0,1].
 + The function `MoTP()` is used to predicts tumor purity from either single-omics or multi-omics data using pre-trained models.
-  + "data_list" is a collection of omics data frames or matrices. Specifically, each  element in the list represents a different omics dataset, where each row corresponds to a gene and each column corresponds to a tumor sample. It is important that the sample names remain consistent across all omics  datasets provided. The list must contain at least one omics dataset.
-  + "omics_list" is a character vector indicating the type of each omics data in data_list. Default is c("mRNA-seq", "miRNA-seq", "lncRNA-seq", "DNA-methylation").
+  + "data_list" is a collection of omics data frames or matrices. Specifically, each  element in the list represents a different omics dataset, It is essential to ensure that row names are features and col names are samples. The sample names must remain consistent across all the omics datasets provided. The list must contain at least one omics dataset.
+  + "omics_list" is a character vector indicating the type of each omics data in data_list. Default is c("mRNA", "miRNA", "lncRNA", "DNA-methylation").
 
 &nbsp;
 &nbsp;
@@ -39,11 +39,7 @@ if (!requireNamespace("devtools", quietly = TRUE))
 devtools::install_github("WangX-Lab/MoTP")
 ```
 
-&nbsp;
-
-
-
-&nbsp;
+&nbsp
 &nbsp;
 
 # Examples
